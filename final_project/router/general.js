@@ -6,7 +6,6 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 
-
 // Register new user
 public_users.post("/register", (req, res) => {
   const username = req.body.username;
@@ -69,6 +68,18 @@ public_users.get('/author/:author', function (req, res) {
 });
 
 
+// ✅ Get books by author using async/await with Axios
+public_users.get('/async/author/:author', async function (req, res) {
+  try {
+    const author = req.params.author;
+    const response = await axios.get(`http://localhost:5000/author/${author}`);
+    return res.status(200).json(response.data);
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching books by author" });
+  }
+});
+
+
 // Get all books based on title
 public_users.get('/title/:title', function (req, res) {
   const title = req.params.title;
@@ -80,6 +91,18 @@ public_users.get('/title/:title', function (req, res) {
   ).map(key => books[key]);
 
   return res.status(200).send(JSON.stringify(books_by_title, null, 4));
+});
+
+
+// ✅ Get books by title using async/await with Axios ⭐
+public_users.get('/async/title/:title', async function (req, res) {
+  try {
+    const title = req.params.title;
+    const response = await axios.get(`http://localhost:5000/title/${title}`);
+    return res.status(200).json(response.data);
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching books by title" });
+  }
 });
 
 
